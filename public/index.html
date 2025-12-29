@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ThrillAI Tour Planner</title>
+</head>
+<body>
+  <h1>ThrillAI</h1>
+  <p>Plan experiences within your budget</p>
+
+  <input id="budget" type="number" placeholder="Enter budget (USD)" />
+  <button onclick="planTrip()">Plan Trip</button>
+
+  <ul id="results"></ul>
+
+  <script>
+    async function planTrip() {
+      const budget = document.getElementById("budget").value;
+      const res = await fetch("/api/plan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ budget })
+      });
+      const data = await res.json();
+      document.getElementById("results").innerHTML =
+        data.map(e => `<li>${e.name} – $${e.price}</li>`).join("");
+    }
+  </script>
+</body>
+</html>
