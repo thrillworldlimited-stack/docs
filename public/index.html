@@ -2,28 +2,46 @@
 <html>
 <head>
   <title>ThrillAI Tour Planner</title>
+  <style>
+    body { font-family: Arial; padding: 30px; }
+    input, button { padding: 10px; margin: 5px; }
+    .card { border: 1px solid #ddd; padding: 15px; margin-top: 10px; }
+  </style>
 </head>
 <body>
-  <h1>ThrillAI</h1>
-  <p>Plan experiences within your budget</p>
 
-  <input id="budget" type="number" placeholder="Enter budget (USD)" />
-  <button onclick="planTrip()">Plan Trip</button>
+<h1>ThrillAI</h1>
+<p>Plan local experiences within your budget, time, and location.</p>
 
-  <ul id="results"></ul>
+<input id="budget" type="number" placeholder="Your budget (USD)" />
+<button onclick="plan()">Plan My Trip</button>
 
-  <script>
-    async function planTrip() {
-      const budget = document.getElementById("budget").value;
-      const res = await fetch("/api/plan", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ budget })
-      });
-      const data = await res.json();
-      document.getElementById("results").innerHTML =
-        data.map(e => `<li>${e.name} – $${e.price}</li>`).join("");
-    }
-  </script>
+<div id="results"></div>
+
+<script>
+const experiences = [
+  { name: "Maasai Cultural Immersion", price: 50, why: "Community-owned" },
+  { name: "Nairobi Street Food Crawl", price: 20, why: "Local vendors" },
+  { name: "Dhow Sunset Cruise", price: 60, why: "Eco-marine experience" },
+  { name: "Karura Forest Walk", price: 10, why: "Eco-friendly" }
+];
+
+function plan() {
+  const budget = Number(document.getElementById("budget").value);
+  const results = experiences.filter(e => e.price <= budget);
+
+  document.getElementById("results").innerHTML =
+    results.length
+      ? results.map(e =>
+          `<div class="card">
+            <strong>${e.name}</strong><br>
+            Price: $${e.price}<br>
+            Why ThrillAI chose this: ${e.why}
+          </div>`
+        ).join("")
+      : "<p>No experiences fit your budget.</p>";
+}
+</script>
+
 </body>
 </html>
